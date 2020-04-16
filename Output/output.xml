@@ -1,72 +1,211 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 3.1.2 (Python 3.7.4 on win32)" generated="20200415 23:02:02.387" rpa="false">
-<suite id="s1" name="Tests" source="C:\Users\Anna.Agafonova\PycharmProjects\Python\Robot\Tests.robot">
-<test id="s1-t1" name="Hello">
-<kw name="Run Server" type="setup">
+<robot rpa="false" generated="20200416 17:11:57.673" generator="Robot 3.1.2 (Python 2.7.17 on linux2)">
+<suite source="/root/Workspace/Python/Tests.robot" id="s1" name="Tests">
+<test id="s1-t1" name="Send Hello To The Server">
+<kw type="setup" name="Run Server And Check">
+<kw name="Run Server">
 <kw name="Start Process" library="Process">
 <doc>Starts a new process on background.</doc>
 <arguments>
-<arg>python.exe</arg>
-<arg>C:${/}Users${/}Anna.Agafonova${/}PycharmProjects${/}Python${/}Robot${/}server.py</arg>
+<arg>python3</arg>
+<arg>server.py</arg>
+<arg>--host\=${host}</arg>
+<arg>--port\=${port}</arg>
+<arg>alias=RunServer</arg>
 </arguments>
 <assign>
-<var>${result}</var>
+<var>${handle}</var>
 </assign>
-<msg timestamp="20200415 23:02:02.431" level="INFO">Starting process:
-python.exe C:\Users\Anna.Agafonova\PycharmProjects\Python\Robot\server.py</msg>
-<msg timestamp="20200415 23:02:02.434" level="INFO">${result} = 1</msg>
-<status status="PASS" starttime="20200415 23:02:02.431" endtime="20200415 23:02:02.434"></status>
+<msg timestamp="20200416 17:11:57.742" level="INFO">Starting process:
+python3 server.py --host=localhost --port=9090</msg>
+<msg timestamp="20200416 17:11:57.748" level="INFO">${handle} = 1</msg>
+<status status="PASS" endtime="20200416 17:11:57.748" starttime="20200416 17:11:57.741"></status>
+</kw>
+<status status="PASS" endtime="20200416 17:11:57.748" starttime="20200416 17:11:57.741"></status>
+</kw>
+<kw name="Check Process Running">
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>1s</arg>
+</arguments>
+<msg timestamp="20200416 17:11:58.755" level="INFO">Slept 1 second</msg>
+<status status="PASS" endtime="20200416 17:11:58.756" starttime="20200416 17:11:57.749"></status>
+</kw>
+<kw name="Run" library="OperatingSystem">
+<doc>Runs the given command in the system and returns the output.</doc>
+<arguments>
+<arg>netstat -a | grep ${host}:${port}</arg>
+</arguments>
+<assign>
+<var>${output_port}</var>
+</assign>
+<msg timestamp="20200416 17:11:58.766" level="INFO">Running command 'netstat -a | grep localhost:9090 2&gt;&amp;1'.</msg>
+<msg timestamp="20200416 17:11:58.919" level="INFO">${output_port} = tcp        0      0 localhost:9090          0.0.0.0:*               LISTEN     </msg>
+<status status="PASS" endtime="20200416 17:11:58.919" starttime="20200416 17:11:58.757"></status>
+</kw>
+<kw name="Should Contain Any" library="BuiltIn">
+<doc>Fails if ``container`` does not contain any of the ``*items``.</doc>
+<arguments>
+<arg>${output_port}</arg>
+<arg>${host}</arg>
+<arg>${port}</arg>
+<arg>LISTEN</arg>
+</arguments>
+<status status="PASS" endtime="20200416 17:11:58.922" starttime="20200416 17:11:58.920"></status>
+</kw>
+<kw name="Run" library="OperatingSystem">
+<doc>Runs the given command in the system and returns the output.</doc>
+<arguments>
+<arg>ps -x | grep python3</arg>
+</arguments>
+<assign>
+<var>${output_process}</var>
+</assign>
+<msg timestamp="20200416 17:11:58.927" level="INFO">Running command 'ps -x | grep python3 2&gt;&amp;1'.</msg>
+<msg timestamp="20200416 17:11:58.976" level="INFO">${output_process} =   492 ?        Ssl    0:00 /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
+  620 ?        Ssl    0:00 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown -...</msg>
+<status status="PASS" endtime="20200416 17:11:58.976" starttime="20200416 17:11:58.922"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${output_process}</arg>
+</arguments>
+<msg timestamp="20200416 17:11:58.977" level="INFO">  492 ?        Ssl    0:00 /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
+  620 ?        Ssl    0:00 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+ 9203 pts/1    T      0:00 python3
+12036 ?        Ss     0:00 python3 server.py --host=localhost --port=9090
+12040 pts/1    S+     0:00 sh -c ps -x | grep python3 2&gt;&amp;1
+12042 pts/1    S+     0:00 grep python3</msg>
+<status status="PASS" endtime="20200416 17:11:58.978" starttime="20200416 17:11:58.977"></status>
+</kw>
+<kw name="Should Contain Any" library="BuiltIn">
+<doc>Fails if ``container`` does not contain any of the ``*items``.</doc>
+<arguments>
+<arg>${output_process}</arg>
+<arg>python3</arg>
+<arg>${host}</arg>
+<arg>${port}</arg>
+</arguments>
+<status status="PASS" endtime="20200416 17:11:58.979" starttime="20200416 17:11:58.978"></status>
+</kw>
+<status status="PASS" endtime="20200416 17:11:58.979" starttime="20200416 17:11:57.748"></status>
+</kw>
+<status status="PASS" endtime="20200416 17:11:58.979" starttime="20200416 17:11:57.740"></status>
+</kw>
+<kw name="Start" library="MyLib">
+<status status="PASS" endtime="20200416 17:11:58.980" starttime="20200416 17:11:58.980"></status>
+</kw>
+<kw name="Send File" library="MyLib">
+<arguments>
+<arg>hello</arg>
+<arg>${host}</arg>
+<arg>${port}</arg>
+</arguments>
+<msg timestamp="20200416 17:11:58.985" level="INFO">client connects
+('client sends', 0)
+('client sends', 1)
+('client sends', 2)
+('client sends', 3)</msg>
+<status status="PASS" endtime="20200416 17:11:58.985" starttime="20200416 17:11:58.981"></status>
+</kw>
+<kw name="Close" library="MyLib">
+<status status="PASS" endtime="20200416 17:11:58.986" starttime="20200416 17:11:58.985"></status>
+</kw>
+<kw type="teardown" name="Stop Server And Check">
+<kw name="Stop Server">
+<kw name="Switch Process" library="Process">
+<doc>Makes the specified process the current `active process`.</doc>
+<arguments>
+<arg>RunServer</arg>
+</arguments>
+<status status="PASS" endtime="20200416 17:11:58.988" starttime="20200416 17:11:58.988"></status>
 </kw>
 <kw name="Terminate Process" library="Process">
 <doc>Stops the process gracefully or forcefully.</doc>
-<arguments>
-<arg>${result}</arg>
-</arguments>
 <assign>
-<var>${cancel_process}</var>
+<var>${result}</var>
 </assign>
-<msg timestamp="20200415 23:02:02.435" level="INFO">Gracefully terminating process.</msg>
-<msg timestamp="20200415 23:02:32.463" level="INFO">Graceful termination failed.</msg>
-<msg timestamp="20200415 23:02:32.463" level="INFO">Forcefully killing process.</msg>
-<msg timestamp="20200415 23:02:32.564" level="INFO">Process completed.</msg>
-<msg timestamp="20200415 23:02:32.564" level="INFO">${cancel_process} = &lt;result object with rc 1&gt;</msg>
-<status status="PASS" starttime="20200415 23:02:02.434" endtime="20200415 23:02:32.564"></status>
+<msg timestamp="20200416 17:11:58.988" level="INFO">Gracefully terminating process.</msg>
+<msg timestamp="20200416 17:11:59.112" level="INFO">Process completed.</msg>
+<msg timestamp="20200416 17:11:59.114" level="INFO">${result} = &lt;result object with rc -15&gt;</msg>
+<status status="PASS" endtime="20200416 17:11:59.114" starttime="20200416 17:11:58.988"></status>
 </kw>
 <kw name="Should Be Equal As Integers" library="BuiltIn">
 <doc>Fails if objects are unequal after converting them to integers.</doc>
 <arguments>
-<arg>${cancel_process.rc}</arg>
-<arg>0</arg>
+<arg>${result.rc}</arg>
+<arg>-15</arg>
 </arguments>
-<msg timestamp="20200415 23:02:32.564" level="INFO">Argument types are:
-&lt;class 'int'&gt;
+<msg timestamp="20200416 17:11:59.119" level="INFO">Argument types are:
+&lt;type 'int'&gt;
 &lt;type 'unicode'&gt;</msg>
-<msg timestamp="20200415 23:02:32.565" level="FAIL">1 != 0</msg>
-<status status="FAIL" starttime="20200415 23:02:32.564" endtime="20200415 23:02:32.565"></status>
+<status status="PASS" endtime="20200416 17:11:59.120" starttime="20200416 17:11:59.116"></status>
 </kw>
-<status status="FAIL" starttime="20200415 23:02:02.430" endtime="20200415 23:02:32.565"></status>
+<status status="PASS" endtime="20200416 17:11:59.122" starttime="20200416 17:11:58.987"></status>
 </kw>
-<kw name="Stop Server" type="teardown">
-<msg timestamp="20200415 23:02:32.566" level="FAIL">User keyword 'Stop Server' contains no keywords.</msg>
-<status status="FAIL" starttime="20200415 23:02:32.566" endtime="20200415 23:02:32.566">User keyword 'Stop Server' contains no keywords.</status>
+<kw name="Check Process Stopping">
+<kw name="Run" library="OperatingSystem">
+<doc>Runs the given command in the system and returns the output.</doc>
+<arguments>
+<arg>ps -a | grep python3</arg>
+</arguments>
+<assign>
+<var>${output_process}</var>
+</assign>
+<msg timestamp="20200416 17:11:59.125" level="INFO">Running command 'ps -a | grep python3 2&gt;&amp;1'.</msg>
+<msg timestamp="20200416 17:11:59.154" level="INFO">${output_process} =  9203 pts/1    00:00:00 python3</msg>
+<status status="PASS" endtime="20200416 17:11:59.154" starttime="20200416 17:11:59.123"></status>
 </kw>
-<status status="FAIL" starttime="20200415 23:02:02.430" endtime="20200415 23:02:32.567" critical="yes">Setup failed:
-1 != 0
-
-Also teardown failed:
-User keyword 'Stop Server' contains no keywords.</status>
+<kw name="Should Not Contain" library="BuiltIn">
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<arguments>
+<arg>${output_process}</arg>
+<arg>${host}</arg>
+<arg>${port}</arg>
+</arguments>
+<status status="PASS" endtime="20200416 17:11:59.155" starttime="20200416 17:11:59.154"></status>
+</kw>
+<kw name="Run" library="OperatingSystem">
+<doc>Runs the given command in the system and returns the output.</doc>
+<arguments>
+<arg>netstat -a | grep ${host}:${port}</arg>
+</arguments>
+<assign>
+<var>${output_port}</var>
+</assign>
+<msg timestamp="20200416 17:11:59.157" level="INFO">Running command 'netstat -a | grep localhost:9090 2&gt;&amp;1'.</msg>
+<msg timestamp="20200416 17:11:59.186" level="INFO">${output_port} = </msg>
+<status status="PASS" endtime="20200416 17:11:59.186" starttime="20200416 17:11:59.155"></status>
+</kw>
+<kw name="Should Not Contain Any" library="BuiltIn">
+<doc>Fails if ``container`` contains one or more of the ``*items``.</doc>
+<arguments>
+<arg>${output_port}</arg>
+<arg>${host}</arg>
+<arg>${port}</arg>
+<arg>LISTEN</arg>
+</arguments>
+<status status="PASS" endtime="20200416 17:11:59.188" starttime="20200416 17:11:59.187"></status>
+</kw>
+<status status="PASS" endtime="20200416 17:11:59.188" starttime="20200416 17:11:59.122"></status>
+</kw>
+<status status="PASS" endtime="20200416 17:11:59.188" starttime="20200416 17:11:58.986"></status>
+</kw>
+<status status="PASS" endtime="20200416 17:11:59.189" critical="yes" starttime="20200416 17:11:57.739"></status>
 </test>
-<status status="FAIL" starttime="20200415 23:02:02.389" endtime="20200415 23:02:32.568"></status>
+<status status="PASS" endtime="20200416 17:11:59.190" starttime="20200416 17:11:57.676"></status>
 </suite>
 <statistics>
 <total>
-<stat pass="0" fail="1">Critical Tests</stat>
-<stat pass="0" fail="1">All Tests</stat>
+<stat fail="0" pass="1">Critical Tests</stat>
+<stat fail="0" pass="1">All Tests</stat>
 </total>
 <tag>
 </tag>
 <suite>
-<stat pass="0" fail="1" id="s1" name="Tests">Tests</stat>
+<stat fail="0" id="s1" name="Tests" pass="1">Tests</stat>
 </suite>
 </statistics>
 <errors>
