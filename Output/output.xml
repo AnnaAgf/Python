@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.1.2 (Python 3.7.4 on win32)" generated="20200415 23:02:02.387" rpa="false">
+<suite id="s1" name="Tests" source="C:\Users\Anna.Agafonova\PycharmProjects\Python\Robot\Tests.robot">
+<test id="s1-t1" name="Hello">
+<kw name="Run Server" type="setup">
+<kw name="Start Process" library="Process">
+<doc>Starts a new process on background.</doc>
+<arguments>
+<arg>python.exe</arg>
+<arg>C:${/}Users${/}Anna.Agafonova${/}PycharmProjects${/}Python${/}Robot${/}server.py</arg>
+</arguments>
+<assign>
+<var>${result}</var>
+</assign>
+<msg timestamp="20200415 23:02:02.431" level="INFO">Starting process:
+python.exe C:\Users\Anna.Agafonova\PycharmProjects\Python\Robot\server.py</msg>
+<msg timestamp="20200415 23:02:02.434" level="INFO">${result} = 1</msg>
+<status status="PASS" starttime="20200415 23:02:02.431" endtime="20200415 23:02:02.434"></status>
+</kw>
+<kw name="Terminate Process" library="Process">
+<doc>Stops the process gracefully or forcefully.</doc>
+<arguments>
+<arg>${result}</arg>
+</arguments>
+<assign>
+<var>${cancel_process}</var>
+</assign>
+<msg timestamp="20200415 23:02:02.435" level="INFO">Gracefully terminating process.</msg>
+<msg timestamp="20200415 23:02:32.463" level="INFO">Graceful termination failed.</msg>
+<msg timestamp="20200415 23:02:32.463" level="INFO">Forcefully killing process.</msg>
+<msg timestamp="20200415 23:02:32.564" level="INFO">Process completed.</msg>
+<msg timestamp="20200415 23:02:32.564" level="INFO">${cancel_process} = &lt;result object with rc 1&gt;</msg>
+<status status="PASS" starttime="20200415 23:02:02.434" endtime="20200415 23:02:32.564"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${cancel_process.rc}</arg>
+<arg>0</arg>
+</arguments>
+<msg timestamp="20200415 23:02:32.564" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20200415 23:02:32.565" level="FAIL">1 != 0</msg>
+<status status="FAIL" starttime="20200415 23:02:32.564" endtime="20200415 23:02:32.565"></status>
+</kw>
+<status status="FAIL" starttime="20200415 23:02:02.430" endtime="20200415 23:02:32.565"></status>
+</kw>
+<kw name="Stop Server" type="teardown">
+<msg timestamp="20200415 23:02:32.566" level="FAIL">User keyword 'Stop Server' contains no keywords.</msg>
+<status status="FAIL" starttime="20200415 23:02:32.566" endtime="20200415 23:02:32.566">User keyword 'Stop Server' contains no keywords.</status>
+</kw>
+<status status="FAIL" starttime="20200415 23:02:02.430" endtime="20200415 23:02:32.567" critical="yes">Setup failed:
+1 != 0
+
+Also teardown failed:
+User keyword 'Stop Server' contains no keywords.</status>
+</test>
+<status status="FAIL" starttime="20200415 23:02:02.389" endtime="20200415 23:02:32.568"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1">Critical Tests</stat>
+<stat pass="0" fail="1">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="0" fail="1" id="s1" name="Tests">Tests</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
