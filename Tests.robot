@@ -36,12 +36,10 @@ Run Server
     ${handle} =  Start Process  python3  server.py  --host\=${host}  --port\=${port}  alias=RunServer
 
 Check Process Running
-    #${output_process} =  Wait Until Keyword Succeeds  10 sec  2 sec  Run  ps -a | grep python3
     Sleep  1s
     ${output_port} =  Run  netstat -a | grep ${host}:${port}
     Should Contain Any  ${output_port}   ${host}  ${port}  LISTEN
     ${output_process} =  Run  ps -x | grep python3
-    Log  ${output_process}
     Should Contain Any  ${output_process}  python3  ${host}  ${port}
 
 Stop Server
