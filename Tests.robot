@@ -2,25 +2,22 @@
 Library  BuiltIn
 Library  OperatingSystem
 Library  Process
-Library  MyLib.py
+Library  Player.py
 
 Test Setup  Run Server And Check
 Test Teardown  Stop Server And Check
 
 *** Variables ***
-${file}
+${file} =  chain_cfu_B.pcap
 ${host} =  localhost
 ${port} =  9090
+${python} =  python3
 
 *** Test Cases ***
-Hello
-    [Tags]  DEBUG
-    Hello  Ann
-
-Send Hello To The Server
+Play Pcap File
     [Tags]
     Start
-    Send File  hello  ${host}  ${port}
+    Send File  ./${file}  ${host}  ${port}
     Wait
 
 *** Keywords ***
@@ -33,14 +30,16 @@ Stop Server And Check
     Check Process Stopped
 
 Run Server
-    ${handle} =  Start Process  python3  server.py  --host\=${host}  --port\=${port}  alias=RunServer
+    ${handle} =  Start Process  ${python}  server.py  --host\=${host}  --port\=${port}  alias=RunServer
 
 Check Process Running
-    Sleep  1s
+    ${output_port} =  Wait Until Keyword Succeeds  2 s  50ms  Check Opened Port
+    ${output_process} =  Run  ps -x | grep ${python}
+    Should Contain Any  ${output_process}  ${python}  ${host}  ${port}
+
+Check Opened Port
     ${output_port} =  Run  netstat -a | grep ${host}:${port}
     Should Contain Any  ${output_port}   ${host}  ${port}  LISTEN
-    ${output_process} =  Run  ps -x | grep python3
-    Should Contain Any  ${output_process}  python3  ${host}  ${port}
 
 Stop Server
     Switch Process  RunServer
@@ -48,7 +47,7 @@ Stop Server
     Should Be Equal As Integers  ${result.rc}  -15
 
 Check Process Stopped
-    ${output_process} =  Run  ps -a | grep python3
+    ${output_process} =  Run  ps -a | grep ${python}
     Should Not Contain  ${output_process}  ${host}  ${port}
     ${output_port} =  Run  netstat -a | grep ${host}:${port}
     Should Not Contain Any  ${output_port}   ${host}  ${port}  LISTEN

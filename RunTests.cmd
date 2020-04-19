@@ -1,2 +1,0 @@
-rem robot --consolecolors on --loglevel INFO  --outputdir .\RunTests --debugfile RunTests.log  --output RunTests.xml  --log RunTests.html  --report NONE .\Tests
-robot --exclude DEBUG --outputdir .\Output --log RunTests.html .\Tests.robot
