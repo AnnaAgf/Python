@@ -4,4 +4,4 @@
 # Run Unix tests
 #
 
-robot --exclude DEBUG --outputdir ./Output --log RunTests.html ./Tests.robot
+robot --exclude DEBUG --outputdir ./output --log run_tests.html ./tests.robot
